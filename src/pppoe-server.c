@@ -1265,15 +1265,6 @@ main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	    }
 
-            /* Service names can only be [-_.A-Za-z0-9/] for shell-escaping
-               safety reasons */
-            for (s=optarg; *s; s++) {
-                if (!strchr("-_.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/", *s)) {
-                    fprintf(stderr, "Illegal character `%c' in service-name: Must be A-Z, a-z, 0-9 or one of ./-_\n", *s);
-                    exit(EXIT_FAILURE);
-                }
-            }
-
 	    ServiceNames[NumServiceNames] = strdup(optarg);
 	    if (!ServiceNames[NumServiceNames]) {
 		fprintf(stderr, "Out of memory\n");
@@ -1681,7 +1672,7 @@ main(int argc, char **argv)
 	if (chdir("/") < 0) {
 	    fatalSys("chdir");
 	}
-	
+
 	if (KidPipe[0] >= 0) {
 	    close(KidPipe[0]);
 	    KidPipe[0] = -1;
@@ -1743,10 +1734,10 @@ main(int argc, char **argv)
 
     /* Tell parent all is cool */
     if (KidPipe[1] >= 0) {
-#pragma GCC diagnostic ignored "-Wunused-result"      
+#pragma GCC diagnostic ignored "-Wunused-result"
 	write(KidPipe[1], "X", 1);
 	close(KidPipe[1]);
-#pragma GCC diagnostic warning "-Wunused-result"      
+#pragma GCC diagnostic warning "-Wunused-result"
 	KidPipe[1] = -1;
     }
 
